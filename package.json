@@ -1,0 +1,23 @@
+{
+  "name": "alumni-ms-server",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Iram0598/ALUMNI-MS-SERVER.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Iram0598/ALUMNI-MS-SERVER/issues"
+  },
+  "homepage": "https://github.com/Iram0598/ALUMNI-MS-SERVER#readme",
+  "dependencies": {
+    "express": "^4.18.2"
+  }
+ 
+}
