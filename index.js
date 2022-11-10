@@ -1,10 +1,15 @@
 const express = require("express");
+const cors = require('cors')
+
+require("./db/config");
+const User = require('./db/User')
+const Event = require('./db/Event')
 
 require("./db/config");
 
-const user = require("./db/config");
 
 const app = express();
+
 
 // const multer = require("multer");
 
@@ -13,13 +18,34 @@ const app = express();
 // const Products = require("./products");
 
 // app.use(express.json());
-
+app.use(express.json())
+app.use(cors());
 app.post("/register", async (req, res) => {
-  let data = new Products(req.body);
-  let result = await data.save();
-  console.log(req.body);
+  let users = User(req.body);
+  let result = await users.save();
   res.send(result);
 });
+
+app.post("/addEvent", async (req, res) => {
+  let events = Event(req.body);
+  let result = await events.save();
+  res.send(result);
+});
+
+app.get("/getEvent", async (req, res) => {
+  const event = await Event.find();
+  if(event.length>0)
+  {
+    res.send(event)
+  }
+  else{
+    res.send({result: "No event found"});
+  }
+  
+});
+
+
+
 
 // app.get("/find", async (req, res) => {
 //   let data = await Products.find();
