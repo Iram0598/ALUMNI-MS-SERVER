@@ -41,15 +41,14 @@ app.get("/getEvent", async (req, res) => {
 });
 
 app.get("/events/:id", async (req, res) => {
-  const eventid = req.params.id;
-  console.log(eventid);
-  const event = await Event.findById(eventid);
+  
+  const event = await Event.findOne({_id: req.params.id});
   if(event)
   {
     res.send(event)
   }
   else{
-    res.send({result: "No event found"});
+    res.send({result: "No record found"});
   }
 });
 
@@ -64,13 +63,14 @@ app.delete("/eventDelete/:id", async (req, res) => {
   res.send(data);
 });
 
-// app.put("/update/:_id", async (req, res) => {
-//   console.log(req.params);
-//   let data = await Products.updateOne(req.params, {
-//     $set: req.body,
-//   });
-//   res.send(data);
-// });
+app.put("/eventUpdate/:id", async (req, res) => {
+  console.log(req.params);
+  let data = await Event.updateOne(
+    {_id: req.params.id},
+    {$set: req.body}
+  );
+  res.send(data);
+});
 
 // app.get("/search/:key", async (req, res) => {
 //   console.log(req.params.key);
