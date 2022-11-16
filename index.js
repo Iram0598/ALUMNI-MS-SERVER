@@ -4,6 +4,7 @@ const cors = require("cors");
 require("./db/config");
 const User = require("./db/User");
 const Event = require("./db/Event");
+const Profile = require("./db/Profile")
 
 require("./db/config");
 
@@ -95,5 +96,37 @@ app.put("/eventUpdate/:id", async (req, res) => {
 // app.post("/upload", upload, (req, res) => {
 //   res.send("file uploaded");
 // });
+
+
+//profile controller
+
+app.post("/addProfiledata", async(req, res) =>{
+  let profiles = Profile(req.body);
+  let result = await profiles.save();
+  res.send(result);
+})
+
+app.get("/getProfiledata", async (req, res) => {
+  const profiles = await Profile.find();
+  if (profiles.length > 0) {
+    res.send(profiles);
+  } else {
+    res.send({ result: "No data found" });
+  }
+});
+
+app.get("/profile/:id", async (req, res) => {
+  
+  const profiles = await Profile.findOne({_id: req.params.id});
+  if(profiles)
+  {
+    res.send(profiles)
+  }
+  else{
+    res.send({result: "No record found"});
+  }
+});
+
+
 
 app.listen(5000);
