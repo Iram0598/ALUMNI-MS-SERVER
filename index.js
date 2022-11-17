@@ -4,7 +4,7 @@ const cors = require("cors");
 require("./db/config");
 const User = require("./db/User");
 const Event = require("./db/Event");
-const Profile = require("./db/Profile")
+const Profile = require("./db/Profile");
 
 require("./db/config");
 
@@ -23,7 +23,11 @@ app.use(cors());
 app.post("/register", async (req, res) => {
   let users = User(req.body);
   let result = await users.save();
-  res.send(result);
+
+  let user1 = Profile({ studentid: req.body.studentid });
+  let result2 = await user1.save();
+
+  res.send("Data saved");
 });
 
 app.post("/addEvent", async (req, res) => {
@@ -42,14 +46,11 @@ app.get("/getEvent", async (req, res) => {
 });
 
 app.get("/events/:id", async (req, res) => {
-  
-  const event = await Event.findOne({_id: req.params.id});
-  if(event)
-  {
-    res.send(event)
-  }
-  else{
-    res.send({result: "No record found"});
+  const event = await Event.findOne({ _id: req.params.id });
+  if (event) {
+    res.send(event);
+  } else {
+    res.send({ result: "No record found" });
   }
 });
 
@@ -60,16 +61,13 @@ app.get("/events/:id", async (req, res) => {
 
 app.delete("/eventDelete/:id", async (req, res) => {
   console.log(req.params);
-  const  data = await Event.deleteOne({_id: req.params.id});
+  const data = await Event.deleteOne({ _id: req.params.id });
   res.send(data);
 });
 
 app.put("/eventUpdate/:id", async (req, res) => {
   console.log(req.params);
-  let data = await Event.updateOne(
-    {_id: req.params.id},
-    {$set: req.body}
-  );
+  let data = await Event.updateOne({ _id: req.params.id }, { $set: req.body });
   res.send(data);
 });
 
@@ -97,14 +95,13 @@ app.put("/eventUpdate/:id", async (req, res) => {
 //   res.send("file uploaded");
 // });
 
-
 //profile controller
 
-app.post("/addProfiledata", async(req, res) =>{
+app.post("/addProfiledata", async (req, res) => {
   let profiles = Profile(req.body);
   let result = await profiles.save();
   res.send(result);
-})
+});
 
 app.get("/getProfiledata", async (req, res) => {
   const profiles = await Profile.find();
@@ -116,17 +113,32 @@ app.get("/getProfiledata", async (req, res) => {
 });
 
 app.get("/profile/:id", async (req, res) => {
-  
-  const profiles = await Profile.findOne({_id: req.params.id});
-  if(profiles)
-  {
-    res.send(profiles)
-  }
-  else{
-    res.send({result: "No record found"});
+  const profiles = await Profile.findOne({ _id: req.params.id });
+  if (profiles) {
+    res.send(profiles);
+  } else {
+    res.send({ result: "No record found" });
   }
 });
 
+app.put("/profileUpdate/:id", async (req, res) => {
+  console.log(req.params);
+  let data = await Profile.updateOne(
+    { _id: req.params.id },
+    { $set: req.body }
+  );
+  res.send(data);
+});
 
+app.get("/search/:key", async (req, res) => {
+  console.log(req.params.key);
+  let data = await Profile.find({
+    $or: [
+      { name: { $regex: req.params.key } }
+      
+    ],
+  });
+  res.send(data);
+});
 
 app.listen(5000);
