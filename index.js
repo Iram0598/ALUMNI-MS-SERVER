@@ -5,7 +5,7 @@ require("./db/config");
 const User = require("./db/User");
 const Event = require("./db/Event");
 const Profile = require("./db/Profile");
-
+const Job = require("./db/Job")
 require("./db/config");
 
 const app = express();
@@ -139,6 +139,24 @@ app.get("/search/:key", async (req, res) => {
     ],
   });
   res.send(data);
+});
+
+
+//Job controller
+
+app.post("/addJob", async (req, res) => {
+  let jobs = Job(req.body);
+  let result = await jobs.save();
+  res.send(result);
+});
+
+app.get("/getJob", async (req, res) => {
+  const job = await Job.find();
+  if (job.length > 0) {
+    res.send(job);
+  } else {
+    res.send({ result: "No event found" });
+  }
 });
 
 app.listen(5000);
