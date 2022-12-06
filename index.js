@@ -134,14 +134,24 @@ app.get("/search/:key", async (req, res) => {
   console.log(req.params.key);
   let data = await Profile.find({
     $or: [
-      { name: { $regex: req.params.key } }
+      { name: { $regex: req.params.key } },
+      { organization: { $regex: req.params.key } },
+      { o_type: { $regex: req.params.key } }
       
     ],
   });
   res.send(data);
 });
 
-
+app.get('/api/sorted_items', (req, res) => {
+  Item.find({}, null, { sort: { name: 1 } }, (err, items) => {
+      if (err) {
+          res.status(500).send(err);
+      } else {
+          res.send(items);
+      }
+  });
+});
 //Job controller
 
 app.post("/addJob", async (req, res) => {
@@ -157,6 +167,12 @@ app.get("/getJob", async (req, res) => {
   } else {
     res.send({ result: "No event found" });
   }
+});
+
+app.delete("/jobDelete/:id", async (req, res) => {
+  console.log(req.params);
+  const data = await Job.deleteOne({ _id: req.params.id });
+  res.send(data);
 });
 
 app.listen(5000);
