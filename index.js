@@ -136,7 +136,8 @@ app.get("/search/:key", async (req, res) => {
     $or: [
       { name: { $regex: req.params.key } },
       { organization: { $regex: req.params.key } },
-      { o_type: { $regex: req.params.key } }
+      { o_type: { $regex: req.params.key } },
+      { studentid: { $regex: req.params.key } }
       
     ],
   });
@@ -173,6 +174,24 @@ app.delete("/jobDelete/:id", async (req, res) => {
   console.log(req.params);
   const data = await Job.deleteOne({ _id: req.params.id });
   res.send(data);
+});
+
+app.put("/jobUpdate/:id", async (req, res) => {
+  console.log(req.params);
+  let data = await Job.updateOne(
+    { _id: req.params.id },
+    { $set: req.body }
+  );
+  res.send(data);
+});
+
+app.get("/jobs/:id", async (req, res) => {
+  const job = await Job.findOne({ _id: req.params.id });
+  if (job) {
+    res.send(job);
+  } else {
+    res.send({ result: "No record found" });
+  }
 });
 
 app.listen(5000);
