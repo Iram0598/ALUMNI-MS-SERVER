@@ -1,6 +1,5 @@
 const express = require("express");
 const cors = require("cors");
-
 require("./db/config");
 const User = require("./db/User");
 const Event = require("./db/Event");
@@ -21,13 +20,16 @@ app.use(express.json());
 app.use(cors());
 
 app.post("/register", async (req, res) => {
+  console.log(req.body)
   let users = User(req.body);
   let result = await users.save();
+
+ 
 
   let user1 = Profile({ studentid: req.body.studentid });
   let result2 = await user1.save();
 
-  res.send("Data saved");
+  res.send(result);
 });
 
 app.post("/addEvent", async (req, res) => {
@@ -79,21 +81,40 @@ app.put("/eventUpdate/:id", async (req, res) => {
 //   res.send(data);
 // });
 
+// Image upload
+// const storage = multer.diskStorage({
+//   destination: './upload/images',
+//   filename: (req, file, cb) =>{
+//     return cb(null, `${file.fieldname}_${Date.now()}${path.extname(file.originalname)}`)
+//   }
+// })
+
 // const upload = multer({
-//   storage: multer.diskStorage({
-//     destination: function (req, file, cb) {
-//       cb(null, "uploads");
-//     },
-
-//     filename: function (req, file, cb) {
-//       cb(null, file.fieldname + "-" + Date.now() + ".jpg");
-//     },
-//   }),
-// }).single("user_file");
-
-// app.post("/upload", upload, (req, res) => {
-//   res.send("file uploaded");
+//   storage: storage,
+//   limits: {
+//     fileSize: 10
+// }
+  
 // });
+
+// app.use('/profile', express.static('upload/images'));
+
+// app.post("/upload", upload.single('profile'), (req, res) => {
+//   res.json({
+//     success: 1,
+//     profile_url: `http://localhost:5000/profile/${req.file.filename}`
+// })
+// });
+
+// function errHandler(err, req, res, next) {
+//   if (err instanceof multer.MulterError) {
+//       res.json({
+//           success: 0,
+//           message: err.message
+//       })
+//   }
+// }
+// app.use(errHandler);
 
 //profile controller
 

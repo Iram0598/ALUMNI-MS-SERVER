@@ -6,6 +6,7 @@ const profileSchema = new mongoose.Schema({
     studentid: String,
     program: String,
     gender: String,
+    profilepicture: String,
     admissionyear: String,
     presentaddress: String,
     permanentaddress: String,
@@ -14,8 +15,9 @@ const profileSchema = new mongoose.Schema({
     designation: String,
     o_type: String,
     joiningdate: String,
-    o_address: String
+    o_address: String,
+    
 
 });
 
-module.exports = mongoose.model("profiles", profileSchema)
+module.exports =  mongoose.model("profiles", profileSchema)

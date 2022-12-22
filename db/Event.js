@@ -4,7 +4,10 @@ const eventSchema = new mongoose.Schema({
 
     title: String,
     description: String,
-    coverphoto: String,
+    coverphoto: {
+        data: Buffer,
+        contentType: String,
+    },
     eventdate: String,
     regfee: String,
     location: String
